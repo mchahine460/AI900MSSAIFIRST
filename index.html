@@ -6,112 +6,207 @@
 <title>AI-900 Study Game · MSS AI First Team</title>
 <style>
   :root {
-    --bg: #141414; --surface: #1f1f1f; --surface2: #2a2a2a;
-    --border: #333333; --border-light: #404040;
-    --ms-blue: #0078d4; --ms-blue-light: #2899f5; --ms-blue-hover: #106ebe;
-    --ms-orange: #ffb900; --ms-purple: #7b2fff; --ms-purple-light: #a67cff;
-    --ms-pink: #e3008c; --ms-pink-light: #f564b8;
-    --ms-teal: #00897b; --ms-teal-light: #4db6ac;
-    --ms-gold: #c19c00; --ms-gold-light: #ffd700;
-    --ms-green: #13a10e; --ms-green-light: #6ccb5f;
-    --text: #f3f3f3; --text-secondary: #c8c8c8; --muted: #888888;
+    --bg:#141414;--surface:#1f1f1f;--surface2:#2a2a2a;--border:#333;--border-light:#404040;
+    --ms-blue:#0078d4;--ms-blue-light:#2899f5;--ms-blue-hover:#106ebe;
+    --ms-orange:#ffb900;--ms-purple:#7b2fff;--ms-purple-light:#a67cff;
+    --ms-pink:#e3008c;--ms-pink-light:#f564b8;
+    --ms-teal:#00897b;--ms-teal-light:#4db6ac;
+    --ms-gold:#c19c00;--ms-gold-light:#ffd700;
+    --ms-green:#13a10e;--ms-green-light:#6ccb5f;
+    --text:#f3f3f3;--text-secondary:#c8c8c8;--muted:#888;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 0 0 80px; }
-  .ms-topbar { width: 100%; background: #000; border-bottom: 3px solid var(--ms-blue); display: flex; align-items: center; justify-content: space-between; padding: 10px 28px; margin-bottom: 40px; }
-  .ms-topbar-left { display: flex; align-items: center; gap: 12px; }
-  .ms-logo { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; width: 22px; height: 22px; }
-  .ms-logo span { border-radius: 1px; display: block; }
-  .ms-logo span:nth-child(1){background:#f25022} .ms-logo span:nth-child(2){background:#7fba00}
-  .ms-logo span:nth-child(3){background:#00a4ef} .ms-logo span:nth-child(4){background:#ffb900}
-  .ms-topbar-brand { font-size: 14px; font-weight: 600; color: #fff; }
-  .ms-topbar-credit { font-size: 11px; color: var(--muted); }
-  .ms-topbar-credit span { color: var(--ms-blue-light); font-weight: 600; }
-  header { text-align: center; margin-bottom: 36px; padding: 0 16px; }
-  .eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 3px; color: var(--ms-blue-light); text-transform: uppercase; margin-bottom: 10px; }
-  h1 { font-size: clamp(24px, 5vw, 42px); font-weight: 700; letter-spacing: -0.5px; line-height: 1.15; }
-  h1 em { font-style: normal; color: var(--ms-blue-light); }
-  .subtitle { font-size: 13px; color: var(--muted); margin-top: 10px; }
-  .tabs { display: flex; gap: 4px; margin-bottom: 24px; flex-wrap: wrap; justify-content: center; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 5px; width: 100%; max-width: 920px; }
-  .tab { font-family: 'Segoe UI', sans-serif; font-weight: 600; font-size: 12px; padding: 8px 14px; border-radius: 4px; border: none; cursor: pointer; background: transparent; color: var(--muted); transition: background 0.15s, color 0.15s; white-space: nowrap; }
-  .tab:hover { background: var(--surface2); color: var(--text-secondary); }
-  .tab.active-rai { background: var(--ms-blue); color: #fff; border: none; }
-  .tab.active-ml  { background: #6b4c00; color: var(--ms-orange); border: 1px solid rgba(255,185,0,0.35); }
-  .tab.active-aml { background: rgba(123,47,255,0.2); color: var(--ms-purple-light); border: 1px solid rgba(123,47,255,0.4); }
-  .tab.active-cv  { background: rgba(227,0,140,0.15); color: var(--ms-pink-light); border: 1px solid rgba(227,0,140,0.4); }
-  .tab.active-nlp { background: rgba(0,137,123,0.18); color: var(--ms-teal-light); border: 1px solid rgba(0,137,123,0.45); }
-  .tab.active-gen { background: rgba(193,156,0,0.18); color: var(--ms-gold-light); border: 1px solid rgba(193,156,0,0.45); }
-  .overall-progress { width: 100%; max-width: 920px; display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; padding: 0 16px; }
-  .prog-block { flex: 1; min-width: 110px; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 10px 14px; }
-  .prog-block-label { font-size: 10px; font-weight: 600; letter-spacing: 0.5px; color: var(--muted); text-transform: uppercase; margin-bottom: 6px; display: flex; justify-content: space-between; }
-  .mini-bar-bg { height: 4px; background: var(--surface2); border-radius: 2px; overflow: hidden; }
-  .mini-bar-fill { height: 100%; border-radius: 2px; width: 0%; transition: width 0.6s cubic-bezier(0.34,1.56,0.64,1); }
-  .mini-bar-fill.rai{background:var(--ms-blue)} .mini-bar-fill.ml{background:var(--ms-orange)}
-  .mini-bar-fill.aml{background:var(--ms-purple)} .mini-bar-fill.cv{background:var(--ms-pink)}
-  .mini-bar-fill.nlp{background:var(--ms-teal)} .mini-bar-fill.gen{background:var(--ms-gold)}
-  .section { display: none; width: 100%; max-width: 920px; padding: 0 16px; }
-  .section.active { display: block; animation: fadeIn 0.25s ease; }
-  @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
-  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-  .section-badge { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 4px 12px; border-radius: 2px; white-space: nowrap; }
-  .section-badge.rai{background:rgba(0,120,212,0.2);color:var(--ms-blue-light);border-left:3px solid var(--ms-blue)}
-  .section-badge.ml{background:rgba(255,185,0,0.12);color:var(--ms-orange);border-left:3px solid var(--ms-orange)}
-  .section-badge.aml{background:rgba(123,47,255,0.12);color:var(--ms-purple-light);border-left:3px solid var(--ms-purple)}
-  .section-badge.cv{background:rgba(227,0,140,0.1);color:var(--ms-pink-light);border-left:3px solid var(--ms-pink)}
-  .section-badge.nlp{background:rgba(0,137,123,0.12);color:var(--ms-teal-light);border-left:3px solid var(--ms-teal)}
-  .section-badge.gen{background:rgba(193,156,0,0.12);color:var(--ms-gold-light);border-left:3px solid var(--ms-gold)}
-  .section-title { font-size: 18px; font-weight: 700; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 12px; }
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 20px 22px 46px; cursor: pointer; position: relative; transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s; overflow: hidden; }
-  .card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; border-radius: 6px 0 0 6px; opacity: 0.5; transition: opacity 0.2s; }
-  .card:hover:not(.revealed)::before { opacity: 1; }
-  .card.rai-card::before{background:var(--ms-blue)} .card.ml-card::before{background:var(--ms-orange)}
-  .card.aml-card::before{background:var(--ms-purple)} .card.cv-card::before{background:var(--ms-pink)}
-  .card.nlp-card::before{background:var(--ms-teal)} .card.gen-card::before{background:var(--ms-gold)}
-  .card.rai-card:hover:not(.revealed){border-color:var(--ms-blue);transform:translateY(-2px);box-shadow:0 4px 20px rgba(0,120,212,0.15)}
-  .card.ml-card:hover:not(.revealed){border-color:rgba(255,185,0,0.6);transform:translateY(-2px);box-shadow:0 4px 20px rgba(255,185,0,0.1)}
-  .card.aml-card:hover:not(.revealed){border-color:rgba(123,47,255,0.6);transform:translateY(-2px);box-shadow:0 4px 20px rgba(123,47,255,0.15)}
-  .card.cv-card:hover:not(.revealed){border-color:rgba(227,0,140,0.5);transform:translateY(-2px);box-shadow:0 4px 20px rgba(227,0,140,0.12)}
-  .card.nlp-card:hover:not(.revealed){border-color:rgba(0,137,123,0.6);transform:translateY(-2px);box-shadow:0 4px 20px rgba(0,137,123,0.15)}
-  .card.gen-card:hover:not(.revealed){border-color:rgba(193,156,0,0.6);transform:translateY(-2px);box-shadow:0 4px 20px rgba(193,156,0,0.15)}
-  .card.revealed { border-color: var(--ms-green); cursor: default; box-shadow: 0 0 0 1px rgba(19,161,14,0.15); }
-  .card.revealed::before { background: var(--ms-green) !important; opacity: 1; }
-  .card-index { position: absolute; top: 14px; right: 16px; font-size: 10px; font-weight: 600; color: var(--border-light); }
-  .card-term { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
-  .check-icon { width: 18px; height: 18px; border-radius: 50%; background: var(--ms-green); display: flex; align-items: center; justify-content: center; flex-shrink: 0; opacity: 0; transform: scale(0); transition: opacity 0.3s 0.1s, transform 0.35s 0.1s cubic-bezier(0.34,1.56,0.64,1); }
-  .check-icon svg { width: 10px; height: 10px; }
-  .card.revealed .check-icon { opacity: 1; transform: scale(1); }
-  .card-def { font-size: 12px; line-height: 1.75; color: var(--text-secondary); margin-bottom: 14px; }
-  .divider { height: 1px; background: var(--border); margin-bottom: 13px; transition: background 0.3s; }
-  .card.revealed .divider { background: rgba(108,203,95,0.3); }
-  .keywords-label { font-size: 9px; font-weight: 700; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; margin-bottom: 9px; }
-  .keywords-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
-  .kw-tag { font-size: 11.5px; font-weight: 600; padding: 4px 12px; border-radius: 2px; opacity: 0; transform: translateY(8px) scale(0.94); transition: opacity 0.3s, transform 0.35s cubic-bezier(0.34,1.56,0.64,1); pointer-events: none; }
-  .kw-tag.visible { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
-  .kw-tag.rai-tag{border:1px solid rgba(0,180,216,0.45);background:rgba(0,180,216,0.12);color:#00b4d8}
-  .kw-tag.ml-tag{border:1px solid rgba(255,185,0,0.5);background:rgba(255,185,0,0.12);color:var(--ms-orange)}
-  .kw-tag.aml-tag{border:1px solid rgba(123,47,255,0.45);background:rgba(123,47,255,0.12);color:var(--ms-purple-light)}
-  .kw-tag.cv-tag{border:1px solid rgba(227,0,140,0.4);background:rgba(227,0,140,0.1);color:var(--ms-pink-light)}
-  .kw-tag.nlp-tag{border:1px solid rgba(0,137,123,0.45);background:rgba(0,137,123,0.12);color:var(--ms-teal-light)}
-  .kw-tag.gen-tag{border:1px solid rgba(193,156,0,0.45);background:rgba(193,156,0,0.12);color:var(--ms-gold-light)}
-  .click-hint { position: absolute; bottom: 13px; right: 16px; font-size: 10px; font-weight: 500; color: var(--muted); display: flex; align-items: center; gap: 5px; transition: opacity 0.2s; }
-  .card.revealed .click-hint { opacity: 0; pointer-events: none; }
-  .win-banner { width: 100%; max-width: 920px; background: var(--surface); border: 1px solid var(--ms-green); border-top: 4px solid var(--ms-green); border-radius: 6px; padding: 40px 36px; text-align: center; margin-top: 32px; display: none; animation: slideUp 0.4s cubic-bezier(0.34,1.56,0.64,1); }
-  .win-banner.show { display: block; }
-  @keyframes slideUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
-  .win-banner h2 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
-  .win-banner h2 span { color: var(--ms-green-light); }
-  .win-banner p { font-size: 13px; color: var(--muted); margin-bottom: 28px; line-height: 1.7; }
-  .win-stats { display: flex; flex-wrap: wrap; gap: 0; justify-content: center; margin-bottom: 28px; }
-  .win-stat { padding: 0 18px; border-right: 1px solid var(--border); }
-  .win-stat:last-child { border-right: none; }
-  .win-stat-label { font-size: 10px; font-weight: 600; letter-spacing: 1.5px; color: var(--muted); text-transform: uppercase; margin-bottom: 4px; }
-  .win-stat-value { font-size: 22px; font-weight: 700; color: var(--ms-blue-light); }
-  .btn { font-family: 'Segoe UI', sans-serif; font-weight: 600; font-size: 14px; padding: 10px 28px; border-radius: 4px; border: none; cursor: pointer; background: var(--ms-blue); color: #fff; transition: background 0.15s; }
-  .btn:hover { background: var(--ms-blue-hover); }
-  footer { margin-top: 48px; text-align: center; font-size: 11px; color: var(--muted); padding: 0 16px; }
-  footer span { color: var(--ms-blue-light); font-weight: 600; }
-  @media (max-width: 520px) { .grid{grid-template-columns:1fr} .ms-topbar-credit{display:none} }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:0 0 80px}
+
+  /* ── TOP BAR ── */
+  .ms-topbar{width:100%;background:#000;border-bottom:3px solid var(--ms-blue);display:flex;align-items:center;justify-content:space-between;padding:10px 28px;margin-bottom:32px}
+  .ms-topbar-left{display:flex;align-items:center;gap:12px}
+  .ms-logo{display:grid;grid-template-columns:1fr 1fr;gap:3px;width:22px;height:22px}
+  .ms-logo span{border-radius:1px;display:block}
+  .ms-logo span:nth-child(1){background:#f25022}.ms-logo span:nth-child(2){background:#7fba00}
+  .ms-logo span:nth-child(3){background:#00a4ef}.ms-logo span:nth-child(4){background:#ffb900}
+  .ms-topbar-brand{font-size:14px;font-weight:600;color:#fff}
+  .ms-topbar-credit{font-size:11px;color:var(--muted)}
+  .ms-topbar-credit span{color:var(--ms-blue-light);font-weight:600}
+
+  /* ── HEADER ── */
+  header{text-align:center;margin-bottom:28px;padding:0 16px}
+  .eyebrow{font-size:11px;font-weight:600;letter-spacing:3px;color:var(--ms-blue-light);text-transform:uppercase;margin-bottom:10px}
+  h1{font-size:clamp(22px,4vw,40px);font-weight:700;letter-spacing:-0.5px;line-height:1.15}
+  h1 em{font-style:normal;color:var(--ms-blue-light)}
+  .subtitle{font-size:13px;color:var(--muted);margin-top:8px}
+
+  /* ── MODE TOGGLE ── */
+  .mode-toggle{display:flex;gap:0;margin-bottom:24px;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:4px;width:fit-content}
+  .mode-btn{font-family:'Segoe UI',sans-serif;font-weight:600;font-size:13px;padding:9px 24px;border-radius:4px;border:none;cursor:pointer;background:transparent;color:var(--muted);transition:all 0.2s;display:flex;align-items:center;gap:8px}
+  .mode-btn.active{background:var(--ms-blue);color:#fff}
+
+  /* ── STUDY MODE ── */
+  #studyMode{width:100%;display:flex;flex-direction:column;align-items:center}
+  .tabs{display:flex;gap:4px;margin-bottom:20px;flex-wrap:wrap;justify-content:center;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:5px;width:100%;max-width:920px}
+  .tab{font-family:'Segoe UI',sans-serif;font-weight:600;font-size:12px;padding:8px 14px;border-radius:4px;border:none;cursor:pointer;background:transparent;color:var(--muted);transition:background 0.15s,color 0.15s;white-space:nowrap}
+  .tab:hover{background:var(--surface2);color:var(--text-secondary)}
+  .tab.active-rai{background:var(--ms-blue);color:#fff;border:none}
+  .tab.active-ml{background:#6b4c00;color:var(--ms-orange);border:1px solid rgba(255,185,0,.35)}
+  .tab.active-aml{background:rgba(123,47,255,.2);color:var(--ms-purple-light);border:1px solid rgba(123,47,255,.4)}
+  .tab.active-cv{background:rgba(227,0,140,.15);color:var(--ms-pink-light);border:1px solid rgba(227,0,140,.4)}
+  .tab.active-nlp{background:rgba(0,137,123,.18);color:var(--ms-teal-light);border:1px solid rgba(0,137,123,.45)}
+  .tab.active-gen{background:rgba(193,156,0,.18);color:var(--ms-gold-light);border:1px solid rgba(193,156,0,.45)}
+
+  .overall-progress{width:100%;max-width:920px;display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;padding:0 16px}
+  .prog-block{flex:1;min-width:110px;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 14px}
+  .prog-block-label{font-size:10px;font-weight:600;letter-spacing:.5px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;display:flex;justify-content:space-between}
+  .mini-bar-bg{height:4px;background:var(--surface2);border-radius:2px;overflow:hidden}
+  .mini-bar-fill{height:100%;border-radius:2px;width:0%;transition:width .6s cubic-bezier(.34,1.56,.64,1)}
+  .mini-bar-fill.rai{background:var(--ms-blue)}.mini-bar-fill.ml{background:var(--ms-orange)}
+  .mini-bar-fill.aml{background:var(--ms-purple)}.mini-bar-fill.cv{background:var(--ms-pink)}
+  .mini-bar-fill.nlp{background:var(--ms-teal)}.mini-bar-fill.gen{background:var(--ms-gold)}
+
+  .section{display:none;width:100%;max-width:920px;padding:0 16px}
+  .section.active{display:block;animation:fadeIn .25s ease}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  .section-header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+  .section-badge{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 12px;border-radius:2px;white-space:nowrap}
+  .section-badge.rai{background:rgba(0,120,212,.2);color:var(--ms-blue-light);border-left:3px solid var(--ms-blue)}
+  .section-badge.ml{background:rgba(255,185,0,.12);color:var(--ms-orange);border-left:3px solid var(--ms-orange)}
+  .section-badge.aml{background:rgba(123,47,255,.12);color:var(--ms-purple-light);border-left:3px solid var(--ms-purple)}
+  .section-badge.cv{background:rgba(227,0,140,.1);color:var(--ms-pink-light);border-left:3px solid var(--ms-pink)}
+  .section-badge.nlp{background:rgba(0,137,123,.12);color:var(--ms-teal-light);border-left:3px solid var(--ms-teal)}
+  .section-badge.gen{background:rgba(193,156,0,.12);color:var(--ms-gold-light);border-left:3px solid var(--ms-gold)}
+  .section-title{font-size:18px;font-weight:700}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:20px 22px 46px;cursor:pointer;position:relative;transition:border-color .2s,box-shadow .2s,transform .15s;overflow:hidden}
+  .card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:6px 0 0 6px;opacity:.5;transition:opacity .2s}
+  .card:hover:not(.revealed)::before{opacity:1}
+  .card.rai-card::before{background:var(--ms-blue)}.card.ml-card::before{background:var(--ms-orange)}
+  .card.aml-card::before{background:var(--ms-purple)}.card.cv-card::before{background:var(--ms-pink)}
+  .card.nlp-card::before{background:var(--ms-teal)}.card.gen-card::before{background:var(--ms-gold)}
+  .card.rai-card:hover:not(.revealed){border-color:var(--ms-blue);transform:translateY(-2px);box-shadow:0 4px 20px rgba(0,120,212,.15)}
+  .card.ml-card:hover:not(.revealed){border-color:rgba(255,185,0,.6);transform:translateY(-2px);box-shadow:0 4px 20px rgba(255,185,0,.1)}
+  .card.aml-card:hover:not(.revealed){border-color:rgba(123,47,255,.6);transform:translateY(-2px);box-shadow:0 4px 20px rgba(123,47,255,.15)}
+  .card.cv-card:hover:not(.revealed){border-color:rgba(227,0,140,.5);transform:translateY(-2px);box-shadow:0 4px 20px rgba(227,0,140,.12)}
+  .card.nlp-card:hover:not(.revealed){border-color:rgba(0,137,123,.6);transform:translateY(-2px);box-shadow:0 4px 20px rgba(0,137,123,.15)}
+  .card.gen-card:hover:not(.revealed){border-color:rgba(193,156,0,.6);transform:translateY(-2px);box-shadow:0 4px 20px rgba(193,156,0,.15)}
+  .card.revealed{border-color:var(--ms-green);cursor:default;box-shadow:0 0 0 1px rgba(19,161,14,.15)}
+  .card.revealed::before{background:var(--ms-green)!important;opacity:1}
+  .card-index{position:absolute;top:14px;right:16px;font-size:10px;font-weight:600;color:var(--border-light)}
+  .card-term{font-size:17px;font-weight:700;color:var(--text);margin-bottom:10px;display:flex;align-items:center;gap:10px}
+  .check-icon{width:18px;height:18px;border-radius:50%;background:var(--ms-green);display:flex;align-items:center;justify-content:center;flex-shrink:0;opacity:0;transform:scale(0);transition:opacity .3s .1s,transform .35s .1s cubic-bezier(.34,1.56,.64,1)}
+  .check-icon svg{width:10px;height:10px}
+  .card.revealed .check-icon{opacity:1;transform:scale(1)}
+  .card-def{font-size:12px;line-height:1.75;color:var(--text-secondary);margin-bottom:14px}
+  .divider{height:1px;background:var(--border);margin-bottom:13px;transition:background .3s}
+  .card.revealed .divider{background:rgba(108,203,95,.3)}
+  .keywords-label{font-size:9px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:9px}
+  .keywords-wrap{display:flex;flex-wrap:wrap;gap:6px}
+  .kw-tag{font-size:11.5px;font-weight:600;padding:4px 12px;border-radius:2px;opacity:0;transform:translateY(8px) scale(.94);transition:opacity .3s,transform .35s cubic-bezier(.34,1.56,.64,1);pointer-events:none}
+  .kw-tag.visible{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+  .kw-tag.rai-tag{border:1px solid rgba(0,180,216,.45);background:rgba(0,180,216,.12);color:#00b4d8}
+  .kw-tag.ml-tag{border:1px solid rgba(255,185,0,.5);background:rgba(255,185,0,.12);color:var(--ms-orange)}
+  .kw-tag.aml-tag{border:1px solid rgba(123,47,255,.45);background:rgba(123,47,255,.12);color:var(--ms-purple-light)}
+  .kw-tag.cv-tag{border:1px solid rgba(227,0,140,.4);background:rgba(227,0,140,.1);color:var(--ms-pink-light)}
+  .kw-tag.nlp-tag{border:1px solid rgba(0,137,123,.45);background:rgba(0,137,123,.12);color:var(--ms-teal-light)}
+  .kw-tag.gen-tag{border:1px solid rgba(193,156,0,.45);background:rgba(193,156,0,.12);color:var(--ms-gold-light)}
+  .click-hint{position:absolute;bottom:13px;right:16px;font-size:10px;font-weight:500;color:var(--muted);display:flex;align-items:center;gap:5px;transition:opacity .2s}
+  .card.revealed .click-hint{opacity:0;pointer-events:none}
+
+  /* ── WIN BANNER (study) ── */
+  .win-banner{width:100%;max-width:920px;background:var(--surface);border:1px solid var(--ms-green);border-top:4px solid var(--ms-green);border-radius:6px;padding:40px 36px;text-align:center;margin-top:32px;display:none;animation:slideUp .4s cubic-bezier(.34,1.56,.64,1)}
+  .win-banner.show{display:block}
+  @keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+  .win-banner h2{font-size:28px;font-weight:700;margin-bottom:8px}
+  .win-banner h2 span{color:var(--ms-green-light)}
+  .win-banner p{font-size:13px;color:var(--muted);margin-bottom:28px;line-height:1.7}
+  .win-stats{display:flex;flex-wrap:wrap;gap:0;justify-content:center;margin-bottom:28px}
+  .win-stat{padding:0 18px;border-right:1px solid var(--border)}
+  .win-stat:last-child{border-right:none}
+  .win-stat-label{font-size:10px;font-weight:600;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-bottom:4px}
+  .win-stat-value{font-size:22px;font-weight:700;color:var(--ms-blue-light)}
+  .btn{font-family:'Segoe UI',sans-serif;font-weight:600;font-size:14px;padding:10px 28px;border-radius:4px;border:none;cursor:pointer;background:var(--ms-blue);color:#fff;transition:background .15s}
+  .btn:hover{background:var(--ms-blue-hover)}
+
+  /* ══════════════════════════════════════
+     EXERCISE MODE
+  ══════════════════════════════════════ */
+  #exerciseMode{width:100%;max-width:1100px;padding:0 16px;display:none;flex-direction:column;align-items:center;gap:20px}
+
+  /* Section picker */
+  .ex-section-picker{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px 24px;width:100%}
+  .ex-section-picker h3{font-size:14px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px}
+  .ex-section-btns{display:flex;flex-wrap:wrap;gap:8px}
+  .ex-sec-btn{font-family:'Segoe UI',sans-serif;font-weight:600;font-size:13px;padding:10px 20px;border-radius:4px;border:1px solid var(--border);cursor:pointer;background:var(--surface2);color:var(--muted);transition:all .2s}
+  .ex-sec-btn:hover{color:var(--text);border-color:var(--border-light)}
+  .ex-sec-btn.active{color:#fff;border-color:transparent}
+  .ex-sec-btn.active.rai{background:var(--ms-blue)}.ex-sec-btn.active.ml{background:#7a5800;color:var(--ms-orange);border-color:rgba(255,185,0,.4)}
+  .ex-sec-btn.active.aml{background:rgba(123,47,255,.35);color:var(--ms-purple-light);border-color:rgba(123,47,255,.5)}
+  .ex-sec-btn.active.cv{background:rgba(227,0,140,.25);color:var(--ms-pink-light);border-color:rgba(227,0,140,.5)}
+  .ex-sec-btn.active.nlp{background:rgba(0,137,123,.25);color:var(--ms-teal-light);border-color:rgba(0,137,123,.5)}
+  .ex-sec-btn.active.gen{background:rgba(193,156,0,.25);color:var(--ms-gold-light);border-color:rgba(193,156,0,.5)}
+
+  /* Exercise stats bar */
+  .ex-stats-bar{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 24px;display:flex;align-items:center;gap:32px}
+  .ex-stat{display:flex;flex-direction:column;gap:2px}
+  .ex-stat-label{font-size:10px;font-weight:600;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase}
+  .ex-stat-value{font-size:20px;font-weight:700;color:var(--ms-blue-light)}
+  .ex-stat-divider{width:1px;height:32px;background:var(--border)}
+  .ex-reset-btn{margin-left:auto;font-family:'Segoe UI',sans-serif;font-weight:600;font-size:12px;padding:8px 18px;border-radius:4px;border:1px solid var(--border);cursor:pointer;background:transparent;color:var(--muted);transition:all .2s}
+  .ex-reset-btn:hover{background:var(--surface2);color:var(--text)}
+
+  /* Main drag-drop arena */
+  .ex-arena{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+
+  /* Left column — drop targets */
+  .ex-targets{display:flex;flex-direction:column;gap:10px}
+  .ex-target{background:var(--surface);border:2px dashed var(--border);border-radius:8px;padding:14px 16px;min-height:72px;transition:border-color .2s,background .2s;position:relative}
+  .ex-target.drag-over{border-color:var(--ms-blue-light);background:rgba(40,153,245,.06)}
+  .ex-target.correct{border:2px solid var(--ms-green);background:rgba(19,161,14,.06);cursor:default}
+  .ex-target.wrong{border-color:var(--ms-pink);animation:shake .4s ease}
+  @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+  .ex-target-term{font-size:15px;font-weight:700;color:var(--text);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+  .ex-target-check{width:16px;height:16px;border-radius:50%;background:var(--ms-green);display:flex;align-items:center;justify-content:center;flex-shrink:0;opacity:0;transform:scale(0);transition:opacity .3s,transform .35s cubic-bezier(.34,1.56,.64,1)}
+  .ex-target-check svg{width:9px;height:9px}
+  .ex-target.correct .ex-target-check{opacity:1;transform:scale(1)}
+  .ex-target-hint{font-size:11px;color:var(--muted);font-style:italic}
+  .ex-target.correct .ex-target-hint{display:none}
+  .ex-dropped-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+
+  /* Right column — keyword pool */
+  .ex-pool-wrap{position:sticky;top:20px}
+  .ex-pool-label{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px}
+  .ex-pool{display:flex;flex-direction:column;gap:8px}
+  .ex-pill{background:var(--surface);border:1px solid var(--border-light);border-radius:6px;padding:12px 16px;cursor:grab;user-select:none;transition:border-color .2s,box-shadow .2s,transform .15s,opacity .2s;display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+  .ex-pill:hover{border-color:var(--ms-blue-light);transform:translateY(-1px);box-shadow:0 4px 16px rgba(40,153,245,.15)}
+  .ex-pill.dragging{opacity:.45;transform:scale(.97);cursor:grabbing}
+  .ex-pill.matched{opacity:0;pointer-events:none;height:0;padding:0;margin:0;border:none;overflow:hidden;transition:all .3s}
+  .ex-kw-chip{font-size:11px;font-weight:600;padding:3px 10px;border-radius:2px}
+
+  /* Colors per section */
+  .ex-pill.rai-pill{border-color:rgba(0,180,216,.3)}.ex-pill.rai-pill:hover{border-color:#00b4d8}
+  .ex-pill.ml-pill{border-color:rgba(255,185,0,.3)}.ex-pill.ml-pill:hover{border-color:var(--ms-orange)}
+  .ex-pill.aml-pill{border-color:rgba(123,47,255,.3)}.ex-pill.aml-pill:hover{border-color:var(--ms-purple-light)}
+  .ex-pill.cv-pill{border-color:rgba(227,0,140,.3)}.ex-pill.cv-pill:hover{border-color:var(--ms-pink-light)}
+  .ex-pill.nlp-pill{border-color:rgba(0,137,123,.3)}.ex-pill.nlp-pill:hover{border-color:var(--ms-teal-light)}
+  .ex-pill.gen-pill{border-color:rgba(193,156,0,.3)}.ex-pill.gen-pill:hover{border-color:var(--ms-gold-light)}
+
+  /* Chip colors inside pills */
+  .rai-chip{background:rgba(0,180,216,.12);color:#00b4d8;border:1px solid rgba(0,180,216,.3)}
+  .ml-chip{background:rgba(255,185,0,.12);color:var(--ms-orange);border:1px solid rgba(255,185,0,.3)}
+  .aml-chip{background:rgba(123,47,255,.12);color:var(--ms-purple-light);border:1px solid rgba(123,47,255,.3)}
+  .cv-chip{background:rgba(227,0,140,.1);color:var(--ms-pink-light);border:1px solid rgba(227,0,140,.3)}
+  .nlp-chip{background:rgba(0,137,123,.12);color:var(--ms-teal-light);border:1px solid rgba(0,137,123,.3)}
+  .gen-chip{background:rgba(193,156,0,.12);color:var(--ms-gold-light);border:1px solid rgba(193,156,0,.3)}
+
+  /* Exercise win */
+  .ex-win{width:100%;background:var(--surface);border:1px solid var(--ms-green);border-top:4px solid var(--ms-green);border-radius:8px;padding:32px;text-align:center;display:none;animation:slideUp .4s cubic-bezier(.34,1.56,.64,1)}
+  .ex-win.show{display:block}
+  .ex-win h2{font-size:26px;font-weight:700;margin-bottom:8px}
+  .ex-win h2 span{color:var(--ms-green-light)}
+  .ex-win p{font-size:13px;color:var(--muted);margin-bottom:20px}
+
+  footer{margin-top:48px;text-align:center;font-size:11px;color:var(--muted);padding:0 16px}
+  footer span{color:var(--ms-blue-light);font-weight:600}
+  @media(max-width:640px){.ex-arena{grid-template-columns:1fr}.ex-pool-wrap{position:static}.ms-topbar-credit{display:none}}
 </style>
 </head>
 <body>
@@ -130,198 +225,379 @@
   <div class="subtitle">Microsoft Azure AI Fundamentals · Click each card to reveal the associated keywords</div>
 </header>
 
-<div class="tabs">
-  <button class="tab active-rai" onclick="switchTab('rai')">🛡️ Responsible AI</button>
-  <button class="tab" onclick="switchTab('ml')">🤖 Machine Learning</button>
-  <button class="tab" onclick="switchTab('aml')">☁️ Azure Machine Learning</button>
-  <button class="tab" onclick="switchTab('cv')">👁️ Computer Vision</button>
-  <button class="tab" onclick="switchTab('nlp')">💬 NLP</button>
-  <button class="tab" onclick="switchTab('gen')">✨ Generative AI</button>
+<!-- Mode toggle -->
+<div class="mode-toggle">
+  <button class="mode-btn active" id="btnStudy" onclick="setMode('study')">📖 Study Mode</button>
+  <button class="mode-btn" id="btnExercise" onclick="setMode('exercise')">🎯 Exercise Mode</button>
 </div>
 
-<div class="overall-progress">
-  <div class="prog-block"><div class="prog-block-label"><span>Responsible AI</span><span id="txt-rai" style="color:var(--ms-blue-light)">0/6</span></div><div class="mini-bar-bg"><div class="mini-bar-fill rai" id="bar-rai"></div></div></div>
-  <div class="prog-block"><div class="prog-block-label"><span>Machine Learning</span><span id="txt-ml" style="color:var(--ms-orange)">0/9</span></div><div class="mini-bar-bg"><div class="mini-bar-fill ml" id="bar-ml"></div></div></div>
-  <div class="prog-block"><div class="prog-block-label"><span>Azure ML</span><span id="txt-aml" style="color:var(--ms-purple-light)">0/14</span></div><div class="mini-bar-bg"><div class="mini-bar-fill aml" id="bar-aml"></div></div></div>
-  <div class="prog-block"><div class="prog-block-label"><span>Computer Vision</span><span id="txt-cv" style="color:var(--ms-pink-light)">0/8</span></div><div class="mini-bar-bg"><div class="mini-bar-fill cv" id="bar-cv"></div></div></div>
-  <div class="prog-block"><div class="prog-block-label"><span>NLP</span><span id="txt-nlp" style="color:var(--ms-teal-light)">0/23</span></div><div class="mini-bar-bg"><div class="mini-bar-fill nlp" id="bar-nlp"></div></div></div>
-  <div class="prog-block"><div class="prog-block-label"><span>Generative AI</span><span id="txt-gen" style="color:var(--ms-gold-light)">0/14</span></div><div class="mini-bar-bg"><div class="mini-bar-fill gen" id="bar-gen"></div></div></div>
-</div>
-
-<div class="section active" id="section-rai"><div class="section-header"><span class="section-badge rai">Section 01</span><span class="section-title">Responsible AI Principles</span></div><div class="grid" id="grid-rai"></div></div>
-<div class="section" id="section-ml"><div class="section-header"><span class="section-badge ml">Section 02</span><span class="section-title">Machine Learning Concepts</span></div><div class="grid" id="grid-ml"></div></div>
-<div class="section" id="section-aml"><div class="section-header"><span class="section-badge aml">Section 03</span><span class="section-title">Azure Machine Learning</span></div><div class="grid" id="grid-aml"></div></div>
-<div class="section" id="section-cv"><div class="section-header"><span class="section-badge cv">Section 04</span><span class="section-title">Computer Vision</span></div><div class="grid" id="grid-cv"></div></div>
-<div class="section" id="section-nlp"><div class="section-header"><span class="section-badge nlp">Section 05</span><span class="section-title">Natural Language Processing</span></div><div class="grid" id="grid-nlp"></div></div>
-<div class="section" id="section-gen"><div class="section-header"><span class="section-badge gen">Section 06</span><span class="section-title">Generative AI</span></div><div class="grid" id="grid-gen"></div></div>
-
-<div class="win-banner" id="winBanner">
-  <div style="font-size:60px;margin-bottom:16px">🏆</div>
-  <h2>Everything <span>Revealed!</span></h2>
-  <p>You've uncovered all 74 keywords across all six sections.<br>You're ready for the AI-900 exam! 🚀</p>
-  <div class="win-stats">
-    <div class="win-stat"><div class="win-stat-label">RAI</div><div class="win-stat-value">6/6</div></div>
-    <div class="win-stat"><div class="win-stat-label">ML</div><div class="win-stat-value">9/9</div></div>
-    <div class="win-stat"><div class="win-stat-label">Azure ML</div><div class="win-stat-value">14/14</div></div>
-    <div class="win-stat"><div class="win-stat-label">CV</div><div class="win-stat-value">8/8</div></div>
-    <div class="win-stat"><div class="win-stat-label">NLP</div><div class="win-stat-value">23/23</div></div>
-    <div class="win-stat"><div class="win-stat-label">Gen AI</div><div class="win-stat-value">14/14</div></div>
-    <div class="win-stat"><div class="win-stat-label">Total</div><div class="win-stat-value">74</div></div>
+<!-- ═══════════ STUDY MODE ═══════════ -->
+<div id="studyMode">
+  <div class="tabs">
+    <button class="tab active-rai" onclick="switchTab('rai')">🛡️ Responsible AI</button>
+    <button class="tab" onclick="switchTab('ml')">🤖 Machine Learning</button>
+    <button class="tab" onclick="switchTab('aml')">☁️ Azure Machine Learning</button>
+    <button class="tab" onclick="switchTab('cv')">👁️ Computer Vision</button>
+    <button class="tab" onclick="switchTab('nlp')">💬 NLP</button>
+    <button class="tab" onclick="switchTab('gen')">✨ Generative AI</button>
   </div>
-  <button class="btn" onclick="resetAll()">Start Over</button>
+
+  <div class="overall-progress">
+    <div class="prog-block"><div class="prog-block-label"><span>Responsible AI</span><span id="txt-rai" style="color:var(--ms-blue-light)">0/6</span></div><div class="mini-bar-bg"><div class="mini-bar-fill rai" id="bar-rai"></div></div></div>
+    <div class="prog-block"><div class="prog-block-label"><span>Machine Learning</span><span id="txt-ml" style="color:var(--ms-orange)">0/9</span></div><div class="mini-bar-bg"><div class="mini-bar-fill ml" id="bar-ml"></div></div></div>
+    <div class="prog-block"><div class="prog-block-label"><span>Azure ML</span><span id="txt-aml" style="color:var(--ms-purple-light)">0/14</span></div><div class="mini-bar-bg"><div class="mini-bar-fill aml" id="bar-aml"></div></div></div>
+    <div class="prog-block"><div class="prog-block-label"><span>Computer Vision</span><span id="txt-cv" style="color:var(--ms-pink-light)">0/8</span></div><div class="mini-bar-bg"><div class="mini-bar-fill cv" id="bar-cv"></div></div></div>
+    <div class="prog-block"><div class="prog-block-label"><span>NLP</span><span id="txt-nlp" style="color:var(--ms-teal-light)">0/23</span></div><div class="mini-bar-bg"><div class="mini-bar-fill nlp" id="bar-nlp"></div></div></div>
+    <div class="prog-block"><div class="prog-block-label"><span>Generative AI</span><span id="txt-gen" style="color:var(--ms-gold-light)">0/14</span></div><div class="mini-bar-bg"><div class="mini-bar-fill gen" id="bar-gen"></div></div></div>
+  </div>
+
+  <div class="section active" id="section-rai"><div class="section-header"><span class="section-badge rai">Section 01</span><span class="section-title">Responsible AI Principles</span></div><div class="grid" id="grid-rai"></div></div>
+  <div class="section" id="section-ml"><div class="section-header"><span class="section-badge ml">Section 02</span><span class="section-title">Machine Learning Concepts</span></div><div class="grid" id="grid-ml"></div></div>
+  <div class="section" id="section-aml"><div class="section-header"><span class="section-badge aml">Section 03</span><span class="section-title">Azure Machine Learning</span></div><div class="grid" id="grid-aml"></div></div>
+  <div class="section" id="section-cv"><div class="section-header"><span class="section-badge cv">Section 04</span><span class="section-title">Computer Vision</span></div><div class="grid" id="grid-cv"></div></div>
+  <div class="section" id="section-nlp"><div class="section-header"><span class="section-badge nlp">Section 05</span><span class="section-title">Natural Language Processing</span></div><div class="grid" id="grid-nlp"></div></div>
+  <div class="section" id="section-gen"><div class="section-header"><span class="section-badge gen">Section 06</span><span class="section-title">Generative AI</span></div><div class="grid" id="grid-gen"></div></div>
+
+  <div class="win-banner" id="winBanner">
+    <div style="font-size:60px;margin-bottom:16px">🏆</div>
+    <h2>Everything <span>Revealed!</span></h2>
+    <p>You've uncovered all 74 keywords across all six sections.<br>You're ready for the AI-900 exam! 🚀</p>
+    <div class="win-stats">
+      <div class="win-stat"><div class="win-stat-label">RAI</div><div class="win-stat-value">6/6</div></div>
+      <div class="win-stat"><div class="win-stat-label">ML</div><div class="win-stat-value">9/9</div></div>
+      <div class="win-stat"><div class="win-stat-label">Azure ML</div><div class="win-stat-value">14/14</div></div>
+      <div class="win-stat"><div class="win-stat-label">CV</div><div class="win-stat-value">8/8</div></div>
+      <div class="win-stat"><div class="win-stat-label">NLP</div><div class="win-stat-value">23/23</div></div>
+      <div class="win-stat"><div class="win-stat-label">Gen AI</div><div class="win-stat-value">14/14</div></div>
+      <div class="win-stat"><div class="win-stat-label">Total</div><div class="win-stat-value">74</div></div>
+    </div>
+    <button class="btn" onclick="resetAll()">Start Over</button>
+  </div>
+</div>
+
+<!-- ═══════════ EXERCISE MODE ═══════════ -->
+<div id="exerciseMode">
+
+  <!-- Section picker -->
+  <div class="ex-section-picker">
+    <h3>Choose a section to practise</h3>
+    <div class="ex-section-btns">
+      <button class="ex-sec-btn rai active" onclick="loadExercise('rai')">🛡️ Responsible AI</button>
+      <button class="ex-sec-btn ml" onclick="loadExercise('ml')">🤖 Machine Learning</button>
+      <button class="ex-sec-btn aml" onclick="loadExercise('aml')">☁️ Azure Machine Learning</button>
+      <button class="ex-sec-btn cv" onclick="loadExercise('cv')">👁️ Computer Vision</button>
+      <button class="ex-sec-btn nlp" onclick="loadExercise('nlp')">💬 NLP</button>
+      <button class="ex-sec-btn gen" onclick="loadExercise('gen')">✨ Generative AI</button>
+    </div>
+  </div>
+
+  <!-- Stats bar -->
+  <div class="ex-stats-bar">
+    <div class="ex-stat"><div class="ex-stat-label">Matched</div><div class="ex-stat-value" id="exScore">0/0</div></div>
+    <div class="ex-stat-divider"></div>
+    <div class="ex-stat"><div class="ex-stat-label">Attempts</div><div class="ex-stat-value" id="exAttempts">0</div></div>
+    <div class="ex-stat-divider"></div>
+    <div class="ex-stat"><div class="ex-stat-label">Accuracy</div><div class="ex-stat-value" id="exAccuracy">—</div></div>
+    <button class="ex-reset-btn" onclick="loadExercise(currentExSection)">↺ Reset</button>
+  </div>
+
+  <!-- Arena -->
+  <div class="ex-arena">
+    <div class="ex-targets" id="exTargets"></div>
+    <div class="ex-pool-wrap">
+      <div class="ex-pool-label">Drag keyword groups → drop on the correct term</div>
+      <div class="ex-pool" id="exPool"></div>
+    </div>
+  </div>
+
+  <!-- Exercise win -->
+  <div class="ex-win" id="exWin">
+    <div style="font-size:56px;margin-bottom:12px">🎉</div>
+    <h2>Section <span>Complete!</span></h2>
+    <p id="exWinMsg">Great work — all terms matched correctly!</p>
+    <button class="btn" onclick="loadExercise(currentExSection)" style="margin-right:10px">↺ Retry</button>
+    <button class="btn" style="background:var(--surface2);color:var(--text);margin-left:4px" onclick="document.querySelector('.ex-sec-btn.active').scrollIntoView({behavior:'smooth'})">Try another section ↑</button>
+  </div>
 </div>
 
 <script>
+/* ═══════════════════════════════════
+   DATA
+═══════════════════════════════════ */
 const SECTIONS = {
-  rai: { data: [
-    {term:'Fairness',def:'AI models are trained on data sourced and selected by humans. There is substantial risk that selection criteria or the data itself reflects unconscious bias, causing discriminatory outputs. Developers must minimize bias and test for fairness.',keywords:['Bias']},
-    {term:'Reliability & Safety',def:'AI is based on probabilistic models — it can and does make mistakes. AI-powered applications need to account for this uncertainty and mitigate risks to prevent harm.',keywords:['Harm']},
-    {term:'Privacy & Security',def:'Models are trained on data that may include personal information. Developers must keep training data secure and ensure models cannot be used to reveal private personal or organizational details.',keywords:['PII / Sensitive Data','Processing Personal Data']},
-    {term:'Inclusiveness',def:'The potential of AI to improve lives should be open to everyone. Developers must ensure solutions benefit all parts of society and do not exclude users based on ability, background, or access.',keywords:['Accessibility','Inclusive Training Data']},
+  rai:{label:'Responsible AI',data:[
+    {term:'Fairness',def:"AI models are trained on data sourced and selected by humans. There is substantial risk that selection criteria or the data itself reflects unconscious bias, causing discriminatory outputs. Developers must minimize bias and test for fairness.",keywords:['Bias']},
+    {term:'Reliability & Safety',def:"AI is based on probabilistic models — it can and does make mistakes. AI-powered applications need to account for this uncertainty and mitigate risks to prevent harm.",keywords:['Harm']},
+    {term:'Privacy & Security',def:"Models are trained on data that may include personal information. Developers must keep training data secure and ensure models cannot be used to reveal private personal or organizational details.",keywords:['PII / Sensitive Data','Processing Personal Data']},
+    {term:'Inclusiveness',def:"The potential of AI to improve lives should be open to everyone. Developers must ensure solutions benefit all parts of society and do not exclude users based on ability, background, or access.",keywords:['Accessibility','Inclusive Training Data']},
     {term:'Transparency',def:"AI can seem like magic, but it's important to make users aware of how the system works, how it takes decisions, and any constraints or limitations it may have.",keywords:['How AI Works','Limitations']},
-    {term:'Accountability',def:'The people and organizations that develop and distribute AI are ultimately accountable for their actions. They must define and apply governance frameworks to meet ethical and legal standards.',keywords:['Governance','Human Oversight','Ethical & Legal Considerations']}
+    {term:'Accountability',def:"The people and organizations that develop and distribute AI are ultimately accountable for their actions. They must define and apply governance frameworks to meet ethical and legal standards.",keywords:['Governance','Human Oversight','Ethical & Legal Considerations']}
   ]},
-  ml: { data: [
-    {term:'Features',def:'The input variables (attributes) used to make a prediction. These are the characteristics or properties of the data that the model uses to learn patterns.',keywords:['Input Variables Used to Make Predictions']},
+  ml:{label:'Machine Learning',data:[
+    {term:'Features',def:"The input variables (attributes) used to make a prediction. These are the characteristics or properties of the data that the model uses to learn patterns.",keywords:['Input Variables Used to Make Predictions']},
     {term:'Labels',def:'The target outcome we want to predict. In an exam, any word that comes after the word "predict:" is always the label.',keywords:['Target Outcome','Word after "predict:" = the Label']},
     {term:'Training Dataset',def:"Used to train the model — fitting the model's parameters. The model learns patterns and relationships from this data during the training process.",keywords:['Model Training']},
     {term:'Validation Dataset',def:"A held-out portion of data used to evaluate the trained model's performance on unseen data and to tune it. It helps detect overfitting and guide adjustments.",keywords:['Evaluating the Trained Model Performance']},
-    {term:'Regression',def:'A supervised Machine Learning technique for predicting numeric values. The model learns the relationship between input features and a numerical output label.',keywords:['Supervised Machine Learning','Numerical Predictions','Cost / Energy / Sales / Money']},
+    {term:'Regression',def:"A supervised Machine Learning technique for predicting numeric values. The model learns the relationship between input features and a numerical output label.",keywords:['Supervised Machine Learning','Numerical Predictions','Cost / Energy / Sales / Money']},
     {term:'Classification',def:'A supervised Machine Learning technique used for predicting categories or class labels. The model outputs discrete classes (e.g., "spam" vs "not spam"), and can also handle multiple classes like different movie genres.',keywords:['Categories / Classes']},
-    {term:'Clustering',def:'An unsupervised learning technique that groups similar data points into clusters without predefined labels. Example: grouping customers based on their purchasing behaviour.',keywords:['Only Unsupervised ML','Grouping Similar Features Together','No Label','e.g. Customers Sharing Same Purchasing Behaviour']},
-    {term:'Deep Learning',def:'An advanced subset of ML that uses neural networks with many layers to learn complex patterns. Excels at image recognition and natural language understanding. Requires large amounts of data and computational power.',keywords:['Many Layers','Image & Language Tasks']},
+    {term:'Clustering',def:"An unsupervised learning technique that groups similar data points into clusters without predefined labels. Example: grouping customers based on their purchasing behaviour.",keywords:['Only Unsupervised ML','Grouping Similar Features Together','No Label','e.g. Customers Sharing Same Purchasing Behaviour']},
+    {term:'Deep Learning',def:"An advanced subset of ML that uses neural networks with many layers to learn complex patterns. Excels at image recognition and natural language understanding. Requires large amounts of data and computational power.",keywords:['Many Layers','Image & Language Tasks']},
     {term:'Neural Networks',def:'Loosely simulate interconnected "neurons" in the human brain. They adjust weights through training to recognize patterns, and form the foundation of deep learning architectures.',keywords:['Many Layers','Image & Language Tasks']}
   ]},
-  aml: { data: [
-    {term:'Automated Machine Learning',def:'A feature in Azure Machine Learning that automatically tries different algorithms and hyperparameters to find the best model without extensive manual tuning. Works with Supervised Machine Learning only. You can use either the Python SDK or a no-code UI to build an AutoML experiment.',keywords:['Automates Model Selection','Python SDK or No-code UI']},
-    {term:'Azure ML Designer',def:'A drag-and-drop, no-code/low-code interface inside Azure Machine Learning Studio that lets you visually build machine learning pipelines without writing code.',keywords:['Drag-and-drop','No-code / Low-code','Visual Pipelines']},
-    {term:'Inferencing Pipeline',def:'A workflow that uses a trained model to generate predictions on new, unseen data.',keywords:['Generate Predictions on New, Unseen Data']},
-    {term:'Workspaces',def:"The starting point for Azure Machine Learning, serving as the central hub for all your ML activities — experiments, models, datasets, and compute resources all live here.",keywords:['Starting Point for Azure ML','Central Hub for All ML Activities']},
-    {term:'Real-time Deployment',def:'Designed for low-latency responses, ideal for scenarios requiring immediate predictions. The model is always on and responds instantly to each request.',keywords:['Low-latency','Immediate Predictions']},
-    {term:'Batch Processing Deployment',def:'Best for large-scale inference at lower operational costs, suitable for non-time-sensitive workloads. Processes data in bulk on a schedule rather than in real time.',keywords:['Large-scale','Non-time-sensitive','Lower Cost']},
-    {term:'Compute Scheduling',def:'Helps optimize resource usage by automatically shutting down compute instances when idle, reducing unnecessary costs.',keywords:['Auto-shutdown','Reduce Costs','Idle Instances']},
-    {term:'Data Transformation',def:'Pre-processing steps applied to raw data before training. Includes cleaning missing data, normalizing values, and selecting the columns of interest in the dataset.',keywords:['Clean Missing Data','Normalize','Select Columns']},
-    {term:'Azure ML Experiment',def:'A logical container for one or more runs within an Azure ML workspace. You can choose a primary metric to compare individual run results, and specify blocked algorithms to exclude from training runs.',keywords:['Logical Container for Runs','Primary Metric','Blocked Algorithms']},
-    {term:'Job',def:"The actual execution of some ML work — this could be a training run, evaluation step, pipeline step, or script run. A job is what actually runs your code in Azure ML.",keywords:['Actual Execution of ML Work']},
-    {term:'Endpoint',def:"A stable, durable HTTPS URL that applications call to send input data to a deployed ML model and receive prediction outputs. It's how your trained model becomes usable in the real world.",keywords:['Make Your Model Available to Use','HTTPS URL','REST API','Authentication Key']},
-    {term:'Azure Container Instances (ACI)',def:'A deployment option for quick, scalable deployment using containers. Best suited for development and testing scenarios with lower traffic.',keywords:['Containers','Quick Scalable Deployment']},
-    {term:'Azure Kubernetes Service (AKS)',def:'A deployment option for container orchestration at scale. Best suited for high-traffic, production-grade deployments requiring reliability and scalability.',keywords:['Kubernetes','Orchestration at Scale']},
-    {term:'Azure Blob Storage',def:'Enables secure, scalable storage for data used by AI and machine learning workloads. Commonly used to store training datasets, model outputs, and other ML artifacts.',keywords:['Secure Data Storage','Scalable Storage for ML Workloads']}
+  aml:{label:'Azure ML',data:[
+    {term:'Automated Machine Learning',def:"A feature in Azure Machine Learning that automatically tries different algorithms and hyperparameters to find the best model without extensive manual tuning. Works with Supervised Machine Learning only.",keywords:['Automates Model Selection','Python SDK or No-code UI']},
+    {term:'Azure ML Designer',def:"A drag-and-drop, no-code/low-code interface inside Azure Machine Learning Studio that lets you visually build machine learning pipelines without writing code.",keywords:['Drag-and-drop','No-code / Low-code','Visual Pipelines']},
+    {term:'Inferencing Pipeline',def:"A workflow that uses a trained model to generate predictions on new, unseen data.",keywords:['Generate Predictions on New, Unseen Data']},
+    {term:'Workspaces',def:"The starting point for Azure Machine Learning, serving as the central hub for all your ML activities.",keywords:['Starting Point for Azure ML','Central Hub for All ML Activities']},
+    {term:'Real-time Deployment',def:"Designed for low-latency responses, ideal for scenarios requiring immediate predictions.",keywords:['Low-latency','Immediate Predictions']},
+    {term:'Batch Processing Deployment',def:"Best for large-scale inference at lower operational costs, suitable for non-time-sensitive workloads.",keywords:['Large-scale','Non-time-sensitive','Lower Cost']},
+    {term:'Compute Scheduling',def:"Helps optimize resource usage by automatically shutting down compute instances when idle, reducing unnecessary costs.",keywords:['Auto-shutdown','Reduce Costs','Idle Instances']},
+    {term:'Data Transformation',def:"Pre-processing steps applied to raw data before training. Includes cleaning missing data, normalizing values, and selecting the columns of interest.",keywords:['Clean Missing Data','Normalize','Select Columns']},
+    {term:'Azure ML Experiment',def:"A logical container for one or more runs within an Azure ML workspace. You can choose a primary metric to compare results, and specify blocked algorithms to exclude from training runs.",keywords:['Logical Container for Runs','Primary Metric','Blocked Algorithms']},
+    {term:'Job',def:"The actual execution of some ML work — training run, evaluation step, pipeline step, or script run.",keywords:['Actual Execution of ML Work']},
+    {term:'Endpoint',def:"A stable, durable HTTPS URL that applications call to send input data to a deployed ML model and receive prediction outputs.",keywords:['Make Your Model Available to Use','HTTPS URL','REST API','Authentication Key']},
+    {term:'Azure Container Instances (ACI)',def:"A deployment option for quick, scalable deployment using containers.",keywords:['Containers','Quick Scalable Deployment']},
+    {term:'Azure Kubernetes Service (AKS)',def:"A deployment option for container orchestration at scale, suitable for high-traffic production deployments.",keywords:['Kubernetes','Orchestration at Scale']},
+    {term:'Azure Blob Storage',def:"Enables secure, scalable storage for data used by AI and machine learning workloads.",keywords:['Secure Data Storage','Scalable Storage for ML Workloads']}
   ]},
-  cv: { data: [
-    {term:'Image Classification',def:'Analyzes an image and categorizes it into one of several predefined classes, outputting a label (or labels) describing the main content of the image.',keywords:['Categorizes Image','Outputs a Label']},
-    {term:'Object Detection',def:'Identifies and locates multiple objects within an image, classifies each object, and draws bounding boxes around them along with a confidence score indicating prediction certainty.',keywords:['Locate Objects','Bounding Boxes','Confidence Score']},
-    {term:'Optical Character Recognition (OCR)',def:'Extracts text from images and converts it into machine-readable text, enabling digital processing of printed or handwritten content.',keywords:['Text Recognition from Images']},
-    {term:'Custom Vision',def:'Allows you to train custom image classification or object detection models using your own labeled images. Each image must not exceed 6MB in size.',keywords:['Custom Models','Your Own Images','Max 6MB']},
-    {term:'Semantic Segmentation',def:'A computer vision technique that classifies every individual pixel in an image according to the object or region it belongs to, providing a detailed scene understanding.',keywords:['Pixel-level Classification']},
-    {term:'Face API',def:'Detects faces in images, compares faces for similarity, and identifies people from a labeled database. Returns face landmarks and attributes such as accessories worn by the subject.',keywords:['Detect Faces','Similarity','Face Landmarks & Attributes']},
-    {term:'Video Analysis',def:'Supports Spatial Analysis, which lets you analyze video streams from camera devices in real time. For each configured camera, Spatial Analysis operations generate an output stream of JSON messages.',keywords:['Analyze Camera Streams','Spatial Analysis']},
-    {term:'Azure AI Video Indexer',def:'A cloud application built on Azure AI services that extracts rich insights from videos using video and audio models. Makes videos searchable and helps identify key historical events of general interest.',keywords:['Extract Insights from Videos','Searchable Videos','Key Events']}
+  cv:{label:'Computer Vision',data:[
+    {term:'Image Classification',def:"Analyzes an image and categorizes it into one of several predefined classes, outputting a label describing the main content.",keywords:['Categorizes Image','Outputs a Label']},
+    {term:'Object Detection',def:"Identifies and locates multiple objects within an image, draws bounding boxes around them along with a confidence score.",keywords:['Locate Objects','Bounding Boxes','Confidence Score']},
+    {term:'Optical Character Recognition (OCR)',def:"Extracts text from images and converts it into machine-readable text.",keywords:['Text Recognition from Images']},
+    {term:'Custom Vision',def:"Allows you to train custom image classification or object detection models using your own labeled images. Each image must not exceed 6MB.",keywords:['Custom Models','Your Own Images','Max 6MB']},
+    {term:'Semantic Segmentation',def:"Classifies every individual pixel in an image according to the object or region it belongs to.",keywords:['Pixel-level Classification']},
+    {term:'Face API',def:"Detects faces, compares for similarity, and identifies people from a labeled database. Returns face landmarks and attributes.",keywords:['Detect Faces','Similarity','Face Landmarks & Attributes']},
+    {term:'Video Analysis',def:"Supports Spatial Analysis — analyzing video streams from camera devices in real time, generating JSON output per camera.",keywords:['Analyze Camera Streams','Spatial Analysis']},
+    {term:'Azure AI Video Indexer',def:"Extracts rich insights from videos using video and audio models. Makes videos searchable and identifies key events.",keywords:['Extract Insights from Videos','Searchable Videos','Key Events']}
   ]},
-  nlp: { data: [
-    {term:'Azure AI Services',def:'A comprehensive suite of tools and APIs for building intelligent applications. Provides prebuilt and customizable models for rapid AI integration. Accessible with a single API and authentication key, with separate billing available per service.',keywords:['Prebuilt Models','Single API & Auth Key','Separate Billing']},
-    {term:'Azure AI Language',def:'Part of Azure AI Services, this service performs advanced natural language processing over unstructured text.',keywords:['Sentiment Analysis','Key Phrase Extraction','Pre-built Question Answering','Conversational Language Understanding','Named Entity Recognition','Text Summarization']},
-    {term:'Sentiment Analysis',def:'Analyzes text and identifies whether the overall tone or opinion expressed is positive, negative, or neutral.',keywords:['Positive','Negative','Neutral']},
-    {term:'Key Phrase Extraction',def:'Automatically identifies and lists the main concepts and topics from unstructured text, helping surface the most important ideas.',keywords:['Extract Key Topics from Text']},
-    {term:'Question Answering',def:'Typically used to build bot applications that respond to customer queries via Bot Service. Can generate Q&A pairs from a knowledge base sourced from a webpage, an existing FAQ, or manually entered data.',keywords:['Bot Service','Knowledge Base','FAQ / Webpage']},
-    {term:'Language Detection',def:'Identifies the language of a given piece of text and returns a language code such as "en" for English.',keywords:['Identifies Language','Returns Language Code e.g. "en"']},
-    {term:'Named Entity Recognition',def:'Identifies and categorizes named entities in text — such as people, places, and events. Can be customized to extract domain-specific categories.',keywords:['People','Places','Events','Custom Categories']},
-    {term:'Entity Linking',def:'Identifies known entities mentioned in text and links them to their corresponding Wikipedia article for additional context.',keywords:['Known Entities Linked to Wikipedia']},
-    {term:'Summarization',def:'Automatically summarizes long pieces of text by identifying and extracting the most important information.',keywords:['Most Important Information from Text']},
-    {term:'Conversational Language Understanding (CLU)',def:'Enables building end-to-end conversational applications that predict the overall intention of an incoming phrase and extract important information from it. Powers smart conversational assistants like Cortana, Alexa, and Siri.',keywords:['Smart Conversational Assistants','Cortana / Alexa / Siri']},
-    {term:'Utterance',def:'One of the three core CLU concepts. An utterance is the actual text or speech input provided by the user to the conversational system.',keywords:['Actual Text or Speech Provided by the User']},
-    {term:'Intent',def:"One of the three core CLU concepts. The intent represents the goal or purpose behind the user's utterance — the action the user wants the system to perform.",keywords:['Goal or Purpose Behind the Utterance']},
-    {term:'Entity',def:'One of the three core CLU concepts. An entity represents specific data points or parameters extracted from the utterance that provide context to the intent.',keywords:['Parameters Giving Context to the Intent']},
-    {term:'Azure AI Translator',def:'A translation service that allows users to translate text and documents via a simple REST API. Supports real-time translation, batch translation for complex files, and custom translation memory. Can be connected to Azure Blob Storage.',keywords:['Real-time & Batch Translation','Custom Translation','Azure Blob Storage']},
-    {term:'Text Translation',def:'Used for quick and accurate translation of text in real time across all supported source and target languages.',keywords:['Text Translation Across All Supported Languages']},
-    {term:'Document Translation',def:'Used to translate multiple documents across all supported languages simultaneously, while preserving the original document structure and formatting.',keywords:['Multiple Documents','Preserves Document Structure']},
-    {term:'Custom Translation',def:'Enables enterprises, app developers, and language service providers to build customized neural machine translation systems with a custom dictionary or domain-specific terminology.',keywords:['Custom Dictionary','Domain-specific Terminology']},
-    {term:'Speech Synthesis',def:'Converts text into human-like synthesized speech. Supports prebuilt neural voices and allows for the creation of custom voices tailored to specific brands or applications.',keywords:['Text to Human-like Speech','Prebuilt Neural Voices','Custom Voices']},
-    {term:'Speech Recognition',def:'Converts spoken audio into text. Commonly used for transcribing phone calls or in any application that requires speech-to-text conversion.',keywords:['Speech to Text','Transcribing Phone Calls']},
-    {term:'Speech Translation',def:'Supports real-time translation of speech into other languages. Provides both speech-to-text and speech-to-speech translation, enabling seamless communication across language barriers.',keywords:['Real-time Speech Translation','Speech-to-Text & Speech-to-Speech']},
-    {term:'Knowledge Mining',def:'Provides automated information extraction from large volumes of often unstructured data, and indexes that information to make it searchable. Azure AI Search is the primary tool used for knowledge mining solutions.',keywords:['Automated Extraction','Unstructured Data','AI Search & Indexing']},
-    {term:'Document Intelligence',def:'An information extraction tool that combines OCR vision capability with NLP to understand structured documents such as invoices, IDs, receipts, business cards, and custom document formats.',keywords:['OCR + NLP','Structured Documents','Invoice / ID / Receipt']},
-    {term:'Azure AI Speech Service',def:'A comprehensive speech service providing speech-to-text, text-to-speech, speech translation, and speaker recognition capabilities, as well as support for voice assistants.',keywords:['Speech-to-Text','Text-to-Speech','Translation','Speaker Recognition','Voice Assistants']}
+  nlp:{label:'NLP',data:[
+    {term:'Azure AI Services',def:"A comprehensive suite of tools and APIs for building intelligent applications. Single API, auth key, separate billing per service.",keywords:['Prebuilt Models','Single API & Auth Key','Separate Billing']},
+    {term:'Azure AI Language',def:"Part of Azure AI Services — performs advanced NLP over unstructured text.",keywords:['Sentiment Analysis','Key Phrase Extraction','Pre-built Question Answering','Conversational Language Understanding','Named Entity Recognition','Text Summarization']},
+    {term:'Sentiment Analysis',def:"Identifies whether text is positive, negative, or neutral.",keywords:['Positive','Negative','Neutral']},
+    {term:'Key Phrase Extraction',def:"Identifies and lists the main concepts from unstructured text.",keywords:['Extract Key Topics from Text']},
+    {term:'Question Answering',def:"Builds bot applications that respond to customer queries via Bot Service, using knowledge bases from FAQs or webpages.",keywords:['Bot Service','Knowledge Base','FAQ / Webpage']},
+    {term:'Language Detection',def:'Identifies the language of text and returns a language code such as "en" for English.',keywords:['Identifies Language','Returns Language Code e.g. "en"']},
+    {term:'Named Entity Recognition',def:"Identifies people, places, events, and more. Can be customized to extract domain-specific categories.",keywords:['People','Places','Events','Custom Categories']},
+    {term:'Entity Linking',def:"Identifies known entities and links them to their Wikipedia article.",keywords:['Known Entities Linked to Wikipedia']},
+    {term:'Summarization',def:"Summarizes text by identifying the most important information.",keywords:['Most Important Information from Text']},
+    {term:'Conversational Language Understanding (CLU)',def:"Builds end-to-end conversational applications that predict user intent and extract key information. Powers Cortana, Alexa, and Siri.",keywords:['Smart Conversational Assistants','Cortana / Alexa / Siri']},
+    {term:'Utterance',def:"One of the three core CLU concepts — the actual text or speech provided by the user.",keywords:['Actual Text or Speech Provided by the User']},
+    {term:'Intent',def:"One of the three core CLU concepts — the goal or purpose behind the utterance.",keywords:['Goal or Purpose Behind the Utterance']},
+    {term:'Entity',def:"One of the three core CLU concepts — specific data points extracted from the utterance that give context to the intent.",keywords:['Parameters Giving Context to the Intent']},
+    {term:'Azure AI Translator',def:"Translates text and documents via REST API. Supports real-time, batch, and custom translation. Connects to Azure Blob Storage.",keywords:['Real-time & Batch Translation','Custom Translation','Azure Blob Storage']},
+    {term:'Text Translation',def:"Quick and accurate real-time text translation across all supported languages.",keywords:['Text Translation Across All Supported Languages']},
+    {term:'Document Translation',def:"Translates multiple documents simultaneously while preserving the original document structure.",keywords:['Multiple Documents','Preserves Document Structure']},
+    {term:'Custom Translation',def:"Builds customized neural machine translation with a custom dictionary or domain-specific terminology.",keywords:['Custom Dictionary','Domain-specific Terminology']},
+    {term:'Speech Synthesis',def:"Converts text into human-like synthesized speech. Supports prebuilt neural voices and custom voices.",keywords:['Text to Human-like Speech','Prebuilt Neural Voices','Custom Voices']},
+    {term:'Speech Recognition',def:"Converts spoken audio into text. Used for transcribing phone calls and speech-to-text applications.",keywords:['Speech to Text','Transcribing Phone Calls']},
+    {term:'Speech Translation',def:"Real-time translation of speech into other languages, providing both speech-to-text and speech-to-speech translation.",keywords:['Real-time Speech Translation','Speech-to-Text & Speech-to-Speech']},
+    {term:'Knowledge Mining',def:"Automated information extraction from large volumes of unstructured data, indexed to make it searchable. Uses Azure AI Search.",keywords:['Automated Extraction','Unstructured Data','AI Search & Indexing']},
+    {term:'Document Intelligence',def:"Combines OCR with NLP to understand structured documents such as invoices, IDs, receipts, and business cards.",keywords:['OCR + NLP','Structured Documents','Invoice / ID / Receipt']},
+    {term:'Azure AI Speech Service',def:"Comprehensive speech service: speech-to-text, text-to-speech, translation, speaker recognition, and voice assistants.",keywords:['Speech-to-Text','Text-to-Speech','Translation','Speaker Recognition','Voice Assistants']}
   ]},
-  gen: { data: [
-    {term:'Generative AI',def:'The ability to generate content based on a language model trained with huge volumes of data, often from the Internet or other public sources. Generative AI can create text, images, code, and more.',keywords:['Create','Generate','Develop','Write']},
-    {term:'Large Language Models (LLMs)',def:'Trained on massive volumes of data (terabytes) and very powerful, though costly to train and use. LLMs are trained to generate completions based on natural language prompts.',keywords:['Trained on TBs of Data','Powerful','Generate Completions from Prompts']},
-    {term:'Tokenization',def:'The process of breaking down text into smaller units called tokens, which can be words, subwords, or characters. This is the first step in how language models process text.',keywords:['Breaking Text into Smaller Units (Tokens)']},
-    {term:'Embeddings',def:'The result of mapping tokens to vectors in a continuous vector space. Embeddings capture the semantic meaning and relationships between words, enabling models to understand context.',keywords:['Capturing Semantic Meaning and Relationship Between Words']},
-    {term:'Attention Mechanism',def:'Helps models focus on relevant parts of the input by checking each token in the context of the entire sentence. It is the core innovation behind Transformers and is not involved in the initial breaking down of text.',keywords:['Transformers','Checks Token in Full Sentence Context']},
-    {term:'System Prompt',def:'Sets the behavior and tone of the model, and any constraints it should adhere to. System prompts guide how the model responds before any user input is provided.',keywords:['Sets Model Behavior','Tone & Constraints']},
-    {term:'AI Foundry',def:"Provides an enterprise-grade environment to develop, test, and deploy generative AI solutions. Acts as Azure's hub for generative AI and AI Services — pick a model, fine-tune, build apps, and monitor usage.",keywords:['Develop, Test & Deploy GenAI','Azure Hub for AI']},
-    {term:'Azure OpenAI Service',def:"A managed service providing access to powerful generative models including GPT-3.5, GPT-4, and DALL-E through Azure's secure, enterprise-grade infrastructure.",keywords:['Access to Generative Models via Azure']},
-    {term:'AI Foundry Model Catalog',def:'A centralized repository of foundation models from Microsoft, OpenAI, and other AI leaders. Allows you to discover, compare, and select models for generative AI tasks.',keywords:['Centralized Model Repository','Discover & Compare Models']},
-    {term:'Microsoft Purview',def:'Helps assess and manage compliance for AI apps. Translates AI regulations such as the EU AI Act into actionable suggestions that can be implemented in Microsoft Foundry to run AI evaluations.',keywords:['Compliance for AI Apps','EU AI Act','Actionable Suggestions']},
-    {term:'GPT-3.5',def:'A large language model by OpenAI known for generating human-like text. Best suited for straightforward text generation tasks such as Q&A when complex reasoning is not required.',keywords:['Human-like Text','Straightforward Q&A','No Complex Reasoning']},
-    {term:'DALL-E',def:'An AI model developed by OpenAI that generates images from textual descriptions, enabling users to create unique visuals by simply describing them in words.',keywords:['Text to Image Generation']},
-    {term:'Safety System',def:'A layer that includes platform-level configurations to help mitigate harm. The Azure OpenAI service includes content filters that suppress prompts and responses based on four severity levels (safe, low, medium, high) across four harm categories.',keywords:['Content Filters','4 Severity Levels','4 Harm Categories (Hate, Sexual, Violence, Self-harm)']},
-    {term:'Copilots',def:'Use plugins to provide end users with the ability to get help with common tasks from a generative AI model. Copilots act as AI-powered assistants embedded in applications.',keywords:['Plugins','Help with Common Tasks','Generative AI Model']}
+  gen:{label:'Generative AI',data:[
+    {term:'Generative AI',def:"Content generation based on a language model trained on huge volumes of data from the internet and other public sources.",keywords:['Create','Generate','Develop','Write']},
+    {term:'Large Language Models (LLMs)',def:"Trained on massive volumes of data (terabytes), very powerful and costly. Generate completions based on natural language prompts.",keywords:['Trained on TBs of Data','Powerful','Generate Completions from Prompts']},
+    {term:'Tokenization',def:"Breaking down text into smaller units called tokens — words, subwords, or characters. The first step in language model processing.",keywords:['Breaking Text into Smaller Units (Tokens)']},
+    {term:'Embeddings',def:"Mapping tokens to vectors in a continuous vector space, capturing semantic meaning and relationships between words.",keywords:['Capturing Semantic Meaning and Relationship Between Words']},
+    {term:'Attention Mechanism',def:"Helps models focus on relevant parts of the input by checking each token in the context of the full sentence. Core innovation behind Transformers.",keywords:['Transformers','Checks Token in Full Sentence Context']},
+    {term:'System Prompt',def:"Sets the behavior, tone, and constraints of the model before any user input is received.",keywords:['Sets Model Behavior','Tone & Constraints']},
+    {term:'AI Foundry',def:"Enterprise-grade environment to develop, test, and deploy generative AI solutions. Azure's hub for AI — pick a model, fine-tune, build apps, monitor usage.",keywords:['Develop, Test & Deploy GenAI','Azure Hub for AI']},
+    {term:'Azure OpenAI Service',def:"Managed service providing access to generative models including GPT-3.5, GPT-4, and DALL-E through Azure's infrastructure.",keywords:['Access to Generative Models via Azure']},
+    {term:'AI Foundry Model Catalog',def:"Centralized repository of foundation models from Microsoft, OpenAI, and other AI leaders. Discover, compare, and select models.",keywords:['Centralized Model Repository','Discover & Compare Models']},
+    {term:'Microsoft Purview',def:"Assess and manage compliance for AI apps. Translates AI regulations (EU AI Act) into actionable suggestions for Microsoft Foundry.",keywords:['Compliance for AI Apps','EU AI Act','Actionable Suggestions']},
+    {term:'GPT-3.5',def:"Large language model by OpenAI for generating human-like text. Best for straightforward Q&A tasks without complex reasoning.",keywords:['Human-like Text','Straightforward Q&A','No Complex Reasoning']},
+    {term:'DALL-E',def:"AI model by OpenAI that generates images from textual descriptions.",keywords:['Text to Image Generation']},
+    {term:'Safety System',def:"Platform-level content filters that suppress harmful prompts and responses based on four severity levels across four harm categories.",keywords:['Content Filters','4 Severity Levels','4 Harm Categories (Hate, Sexual, Violence, Self-harm)']},
+    {term:'Copilots',def:"Use plugins to help end users with common tasks from a generative AI model. AI-powered assistants embedded in applications.",keywords:['Plugins','Help with Common Tasks','Generative AI Model']}
   ]}
 };
 
-const revealed = {rai:0, ml:0, aml:0, cv:0, nlp:0, gen:0};
+/* ═══════════════════════════════════
+   STUDY MODE
+═══════════════════════════════════ */
+const revealed={rai:0,ml:0,aml:0,cv:0,nlp:0,gen:0};
 
-function switchTab(tab) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.getElementById('section-' + tab).classList.add('active');
-  document.querySelectorAll('.tab').forEach(t => { t.className = 'tab'; });
-  const order = ['rai','ml','aml','cv','nlp','gen'];
-  document.querySelectorAll('.tab')[order.indexOf(tab)].classList.add('active-' + tab);
+function setMode(mode){
+  document.getElementById('studyMode').style.display = mode==='study'?'flex':'none';
+  document.getElementById('exerciseMode').style.display = mode==='exercise'?'flex':'none';
+  document.getElementById('btnStudy').classList.toggle('active', mode==='study');
+  document.getElementById('btnExercise').classList.toggle('active', mode==='exercise');
+  if(mode==='exercise' && !exInitialized){ loadExercise('rai'); exInitialized=true; }
 }
 
-function buildGrid(type) {
-  const container = document.getElementById('grid-' + type);
-  container.innerHTML = '';
-  SECTIONS[type].data.forEach((item, i) => {
-    const card = document.createElement('div');
-    card.className = 'card ' + type + '-card';
-    const tagsHTML = item.keywords.map(kw => '<span class="kw-tag ' + type + '-tag">' + kw + '</span>').join('');
-    card.innerHTML =
-      '<span class="card-index">' + String(i+1).padStart(2,'0') + '</span>' +
-      '<div class="card-term"><div class="check-icon"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#141414" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>' + item.term + '</div>' +
-      '<div class="card-def">' + item.def + '</div>' +
-      '<div class="divider"></div>' +
-      '<div class="keywords-label">Keywords</div>' +
-      '<div class="keywords-wrap">' + tagsHTML + '</div>' +
+function switchTab(tab){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('section-'+tab).classList.add('active');
+  document.querySelectorAll('.tab').forEach(t=>{t.className='tab';});
+  var order=['rai','ml','aml','cv','nlp','gen'];
+  document.querySelectorAll('.tab')[order.indexOf(tab)].classList.add('active-'+tab);
+}
+
+function buildGrid(type){
+  var container=document.getElementById('grid-'+type);
+  container.innerHTML='';
+  SECTIONS[type].data.forEach(function(item,i){
+    var card=document.createElement('div');
+    card.className='card '+type+'-card';
+    var tagsHTML=item.keywords.map(function(kw){return '<span class="kw-tag '+type+'-tag">'+kw+'</span>';}).join('');
+    card.innerHTML=
+      '<span class="card-index">'+String(i+1).padStart(2,'0')+'</span>'+
+      '<div class="card-term"><div class="check-icon"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#141414" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>'+item.term+'</div>'+
+      '<div class="card-def">'+item.def+'</div>'+
+      '<div class="divider"></div>'+
+      '<div class="keywords-label">Keywords</div>'+
+      '<div class="keywords-wrap">'+tagsHTML+'</div>'+
       '<div class="click-hint"><svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1v10M1 6h10" stroke-linecap="round"/></svg>click to reveal</div>';
-    card.addEventListener('click', function() { onCardClick(card, type); });
+    card.addEventListener('click',function(){onCardClick(card,type);});
     container.appendChild(card);
   });
 }
 
-function onCardClick(card, type) {
-  if (card.classList.contains('revealed')) return;
+function onCardClick(card,type){
+  if(card.classList.contains('revealed'))return;
   card.classList.add('revealed');
   revealed[type]++;
   updateProgress(type);
-  var tags = card.querySelectorAll('.kw-tag');
-  tags.forEach(function(tag, i) { setTimeout(function(){ tag.classList.add('visible'); }, i * 110); });
-  var allDone = Object.keys(revealed).every(function(k){ return revealed[k] === SECTIONS[k].data.length; });
-  if (allDone) {
-    setTimeout(function(){
-      document.getElementById('winBanner').classList.add('show');
-      document.getElementById('winBanner').scrollIntoView({behavior:'smooth', block:'center'});
-    }, 600);
-  }
+  var tags=card.querySelectorAll('.kw-tag');
+  tags.forEach(function(tag,i){setTimeout(function(){tag.classList.add('visible');},i*110);});
+  var allDone=Object.keys(revealed).every(function(k){return revealed[k]===SECTIONS[k].data.length;});
+  if(allDone){setTimeout(function(){document.getElementById('winBanner').classList.add('show');document.getElementById('winBanner').scrollIntoView({behavior:'smooth',block:'center'});},600);}
 }
 
-function updateProgress(type) {
-  var r = revealed[type], t = SECTIONS[type].data.length;
-  document.getElementById('bar-' + type).style.width = (r/t*100) + '%';
-  document.getElementById('txt-' + type).textContent = r + '/' + t;
+function updateProgress(type){
+  var r=revealed[type],t=SECTIONS[type].data.length;
+  document.getElementById('bar-'+type).style.width=(r/t*100)+'%';
+  document.getElementById('txt-'+type).textContent=r+'/'+t;
 }
 
-function resetAll() {
-  Object.keys(revealed).forEach(function(k){ revealed[k] = 0; });
+function resetAll(){
+  Object.keys(revealed).forEach(function(k){revealed[k]=0;});
   document.getElementById('winBanner').classList.remove('show');
-  Object.keys(SECTIONS).forEach(function(type){ updateProgress(type); buildGrid(type); });
+  Object.keys(SECTIONS).forEach(function(type){updateProgress(type);buildGrid(type);});
   switchTab('rai');
 }
 
-// Init
-Object.keys(SECTIONS).forEach(function(type){ buildGrid(type); });
+/* ═══════════════════════════════════
+   EXERCISE MODE
+═══════════════════════════════════ */
+var currentExSection='rai';
+var exInitialized=false;
+var exMatched=0,exAttempts=0,exTotal=0;
+var draggingId=null;
+
+function loadExercise(type){
+  currentExSection=type;
+  exMatched=0; exAttempts=0;
+  document.getElementById('exWin').classList.remove('show');
+
+  // Update section picker buttons
+  document.querySelectorAll('.ex-sec-btn').forEach(function(b){
+    b.classList.remove('active');
+  });
+  var order=['rai','ml','aml','cv','nlp','gen'];
+  document.querySelectorAll('.ex-sec-btn')[order.indexOf(type)].classList.add('active');
+
+  var data=SECTIONS[type].data;
+  exTotal=data.length;
+  updateExStats();
+
+  // Build drop targets (left)
+  var targets=document.getElementById('exTargets');
+  targets.innerHTML='';
+  data.forEach(function(item,i){
+    var t=document.createElement('div');
+    t.className='ex-target';
+    t.dataset.idx=i;
+    t.innerHTML=
+      '<div class="ex-target-term">'+
+        '<div class="ex-target-check"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#141414" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>'+
+        item.term+
+      '</div>'+
+      '<div class="ex-target-hint">Drop the keyword group here</div>'+
+      '<div class="ex-dropped-tags"></div>';
+    t.addEventListener('dragover',function(e){e.preventDefault();if(!t.classList.contains('correct'))t.classList.add('drag-over');});
+    t.addEventListener('dragleave',function(){t.classList.remove('drag-over');});
+    t.addEventListener('drop',function(e){e.preventDefault();t.classList.remove('drag-over');onDrop(t,i);});
+    targets.appendChild(t);
+  });
+
+  // Build keyword pills (right) — shuffle
+  var pool=document.getElementById('exPool');
+  pool.innerHTML='';
+  var indices=data.map(function(_,i){return i;});
+  // Fisher-Yates shuffle
+  for(var i=indices.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var tmp=indices[i];indices[i]=indices[j];indices[j]=tmp;}
+
+  indices.forEach(function(idx){
+    var item=data[idx];
+    var pill=document.createElement('div');
+    pill.className='ex-pill '+type+'-pill';
+    pill.draggable=true;
+    pill.dataset.idx=idx;
+    pill.id='pill-'+idx;
+    var chips=item.keywords.map(function(kw){return '<span class="ex-kw-chip '+type+'-chip">'+kw+'</span>';}).join('');
+    pill.innerHTML=chips;
+    pill.addEventListener('dragstart',function(e){
+      draggingId=idx;
+      pill.classList.add('dragging');
+      e.dataTransfer.effectAllowed='move';
+    });
+    pill.addEventListener('dragend',function(){pill.classList.remove('dragging');});
+    pool.appendChild(pill);
+  });
+}
+
+function onDrop(target,targetIdx){
+  if(target.classList.contains('correct'))return;
+  if(draggingId===null)return;
+  exAttempts++;
+
+  if(parseInt(draggingId)===targetIdx){
+    // Correct!
+    exMatched++;
+    target.classList.add('correct');
+    // Show chips inside the target
+    var data=SECTIONS[currentExSection].data;
+    var dropped=target.querySelector('.ex-dropped-tags');
+    data[targetIdx].keywords.forEach(function(kw){
+      var chip=document.createElement('span');
+      chip.className='ex-kw-chip '+currentExSection+'-chip';
+      chip.textContent=kw;
+      dropped.appendChild(chip);
+    });
+    // Hide pill from pool
+    var pill=document.getElementById('pill-'+draggingId);
+    if(pill)pill.classList.add('matched');
+    updateExStats();
+    if(exMatched===exTotal){
+      setTimeout(function(){
+        document.getElementById('exWinMsg').textContent=
+          'You matched all '+exTotal+' terms with '+exAttempts+' attempts. Accuracy: '+Math.round(exTotal/exAttempts*100)+'%';
+        document.getElementById('exWin').classList.add('show');
+        document.getElementById('exWin').scrollIntoView({behavior:'smooth',block:'center'});
+      },500);
+    }
+  } else {
+    // Wrong
+    target.classList.add('wrong');
+    setTimeout(function(){target.classList.remove('wrong');},500);
+  }
+  draggingId=null;
+}
+
+function updateExStats(){
+  document.getElementById('exScore').textContent=exMatched+'/'+exTotal;
+  document.getElementById('exAttempts').textContent=exAttempts;
+  document.getElementById('exAccuracy').textContent=exAttempts>0?Math.round(exMatched/exAttempts*100)+'%':'—';
+}
+
+/* ═══════════════════════════════════
+   INIT
+═══════════════════════════════════ */
+Object.keys(SECTIONS).forEach(function(type){buildGrid(type);});
+document.getElementById('studyMode').style.display='flex';
+document.getElementById('exerciseMode').style.display='none';
 </script>
 
 <footer>
